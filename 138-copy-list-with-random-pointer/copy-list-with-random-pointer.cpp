@@ -21,30 +21,21 @@ public:
             return nullptr;
         }
 
+        unordered_map<Node*, Node*> oldToNew;
+
         Node* l1 = head;
         while(l1) {
-            Node* l2 = new Node(l1->val);
-            l2->next = l1->random;
-            l1->random = l2;
-            l1 = l1->next;
-        }
-
-        Node* newNode = head->random;
-
-        l1 = head;
-        while(l1) {
-            Node* l2 = l1->random;
-            l2->random = (l2->next != nullptr) ? l2->next->random : nullptr;
+            oldToNew[l1] = new Node(l1->val);
             l1 = l1->next;
         }
 
         l1 = head;
         while(l1) {
-            Node* l2 = l1->random;
-            l1->random = l2->next;
-            l2->next = (l1->next != nullptr) ? l1->next->random : nullptr;
+            oldToNew[l1]->next = oldToNew[l1->next];
+            oldToNew[l1]->random = oldToNew[l1->random];
             l1 = l1->next;
         }
-        return newNode;
+
+        return oldToNew[head];
     }
 };
