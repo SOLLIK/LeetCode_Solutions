@@ -11,45 +11,28 @@
  */
 class Solution {
 public:
-    string serialize(TreeNode* root) {
-        if(root == nullptr) {
-            return "$#";
+    bool sameTree(TreeNode* root, TreeNode* subRoot) {
+        if(!root && ! subRoot) {
+            return true;
         }
-
-        return "$" + to_string(root->val) + serialize(root->left) + serialize(root->right);
-    }
-
-    vector<int> z_function(string s) {
-        vector<int> z(s.length());
-        int l = 0, r = 0, n = s.length();
-        for(int i = 1; i < n; i++) {
-            if(i <= r) {
-                z[i] = min(r - i + 1, z[i - l]); 
-            }
-            while(i + z[i] < n && s[z[i]] == s[i + z[i]]) {
-                z[i]++;
-            }
-            if(i + z[i] - 1 > r) {
-                l = i;
-                r = i + z[i] - 1;
-            }
+        if(root && subRoot && root->val == subRoot->val) {
+            return sameTree(root->left, subRoot->left) && sameTree(root->right, subRoot->right);
         }
-        return z;
+        return false;
     }
 
     bool isSubtree(TreeNode* root, TreeNode* subRoot) {
-        string sr = serialize(root);
-        string ssR = serialize(subRoot);
-        string combined = ssR + "|" + sr;
-
-        vector<int> z_value = z_function(combined);
-        int sub_len = ssR.length();
-
-        for(int i = sub_len + 1; i < combined.length(); i++) {
-            if(z_value[i] == sub_len) {
-                return true;
-            }
+        if(!root) {
+            return false;
         }
-        return false;
+        if(!subRoot) {
+            return false;
+        }
+
+        if(sameTree(root, subRoot)) {
+            return true;
+        }
+        
+        return isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot);
     }
 };
