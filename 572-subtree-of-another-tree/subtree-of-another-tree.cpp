@@ -11,24 +11,23 @@
  */
 class Solution {
 public:
-    bool sameTree(TreeNode* root, TreeNode* subRoot) {
-        if(!root && ! subRoot) {
+    bool sameTree(TreeNode* root, TreeNode* target) {
+        if(root==NULL && target==NULL) {
             return true;
         }
-        if(root && subRoot && root->val == subRoot->val) {
-            return sameTree(root->left, subRoot->left) && sameTree(root->right, subRoot->right);
+        if(root==NULL || target==NULL) {
+            return false;
         }
-        return false;
+        if(root->val != target->val) {
+            return false;
+        }
+        return sameTree(root->left, target->left) && sameTree(root->right, target->right);
     }
 
     bool isSubtree(TreeNode* root, TreeNode* subRoot) {
         if(!root) {
             return false;
         }
-        if(!subRoot) {
-            return false;
-        }
-
         if(sameTree(root, subRoot)) {
             return true;
         }
