@@ -16,16 +16,16 @@ private:
             return 0;
         }
 
-        int leftMax = max(dfs(root->left, res), 0);
-        int rightMax = max(dfs(root->right, res), 0);
+        int leftMax = dfs(root->left, res);
+        int rightMax = dfs(root->right, res);
 
         res = max(res, root->val + leftMax + rightMax);
-        return root->val + max(leftMax, rightMax);
+        return max({root->val + leftMax, root->val + rightMax, root->val, 0});
     }
 
 public:
     int maxPathSum(TreeNode* root) {
-        int res = root->val;
+        int res = INT_MIN;
         dfs(root, res);
         return res;
     }
