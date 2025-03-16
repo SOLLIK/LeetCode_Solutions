@@ -1,56 +1,35 @@
-class TrieNode {
-public:
-    vector<TrieNode*> children;
-    bool word;
-
-    TrieNode() : children(26, nullptr), word(false) {}
-};
-
 class WordDictionary {
 private:
-    bool dfs(string word, int j, TrieNode* root) {
-        TrieNode* curr = root;
-
-        for(int i = j; i < word.size(); i++) {
-            int c = word[i];
-            if(c == '.') {
-                for(TrieNode* child : curr->children) {
-                    if(child != nullptr && dfs(word, i + 1, child)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            else {
-                if(curr->children[c - 'a'] == nullptr) {
-                    return false;
-                }
-                curr = curr->children[c - 'a'];
-            }
-        }
-        return curr->word;
-    }   
+    unordered_map<int, unordered_set<string>> hashmap;
 public:
-    TrieNode* root;
-
-    WordDictionary() : root(new TrieNode()) {}
+    WordDictionary() {
+        
+    }
     
     void addWord(string word) {
-        TrieNode* curr = root;
-        for(char c : word) {
-            if(curr->children[c - 'a'] == nullptr) {
-                curr->children[c - 'a'] = new TrieNode();
-            }
-            curr = curr->children[c - 'a'];
-        }
-        curr->word = true;
+        int n = word.size();
+        hashmap[n].insert(word);
+        if(!hashmap[-2].empty()){hashmap[-2].clear();}
+        return;
     }
     
     bool search(string word) {
-        return dfs(word, 0, root);
+        int n = word.size();
+        if(hashmap[n].count(word)||hashmap[-1].count(word)){return true;}
+        if(hashmap[-2].count(word)){return false;}
+        for(const auto& s:hashmap[n]){
+            for(int i=0;i<n;++i){
+                if(word[i]!=s[i] && word[i]!='.'){break;}
+                if(i==n-1){
+                    hashmap[-1].insert(word);
+                    return true;
+                }
+            }
+        }
+        hashmap[-2].insert(word);
+        return false;
     }
 };
-
 /**
  * Your WordDictionary object will be instantiated and called as such:
  * WordDictionary* obj = new WordDictionary();
