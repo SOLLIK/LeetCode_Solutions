@@ -1,7 +1,14 @@
 class TrieNode {
 public:
-    unordered_map<char, TrieNode*> children;
-    bool endOfWord = false;
+    TrieNode* children[26];
+    bool endOfWord;
+
+    TrieNode() {
+        for(int i = 0; i < 26; i++) {
+            children[i] = nullptr;
+        }
+        endOfWord = false;
+    }
 };
 
 class Trie {
@@ -14,10 +21,11 @@ public:
     void insert(string word) {
         TrieNode* curr = root;
         for(char c : word) {
-            if(curr->children.find(c) == curr->children.end()) {
-                curr->children[c] = new TrieNode();
+            int i = c - 'a';
+            if(curr->children[i] == nullptr) {
+                curr->children[i] = new TrieNode();
             }
-            curr = curr->children[c];
+            curr = curr->children[i];
         }
         curr->endOfWord = true;
     }
@@ -25,10 +33,11 @@ public:
     bool search(string word) {
         TrieNode* curr = root;
         for(char c : word) {
-            if(curr->children.find(c) == curr->children.end()) {
+            int i = c - 'a';
+            if(curr->children[i] == nullptr) {
                 return false;
             }
-            curr = curr->children[c];
+            curr = curr->children[i];
         }
         return curr->endOfWord;
     }
@@ -36,10 +45,11 @@ public:
     bool startsWith(string prefix) {
         TrieNode* curr = root;
         for(char c : prefix) {
-            if(curr->children.find(c) == curr->children.end()) {
+            int i = c - 'a';
+            if(curr->children[i] == nullptr) {
                 return false;
             }
-            curr = curr->children[c];
+            curr = curr->children[i];
         }
         return true;
     }
