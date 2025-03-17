@@ -3,21 +3,22 @@ public:
     priority_queue<int, vector<int>, greater<int>> MinHeap;
     int k;
 
-    KthLargest(int k, vector<int>& nums) {
-        this->k = k;
-        for(int num : nums) {
-            MinHeap.push(num);
-            if(MinHeap.size() > k) {
-                MinHeap.pop();
-            }
-        }
-    }
-    
-    int add(int val) {
+    void minHeap(int val) {
         MinHeap.push(val);
         if(MinHeap.size() > k) {
             MinHeap.pop();
         }
+    }
+
+    KthLargest(int k, vector<int>& nums) {
+        this->k = k;
+        for(int num : nums) {
+            minHeap(num);
+        }
+    }
+    
+    int add(int val) {
+        minHeap(val);
         return MinHeap.top();
     }
 };
