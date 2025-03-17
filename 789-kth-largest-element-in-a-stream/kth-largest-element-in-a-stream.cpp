@@ -1,8 +1,8 @@
 class KthLargest {
-public:
+private:
     priority_queue<int, vector<int>, greater<int>> MinHeap;
     int k;
-
+public:
     void minHeap(int val) {
         MinHeap.push(val);
         if(MinHeap.size() > k) {
