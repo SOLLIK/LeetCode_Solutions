@@ -6,12 +6,15 @@ public:
             count[task - 'A']++;
         }
 
-        sort(count.begin(), count.end());
-        int maxf = count[25];
-        int idel = (maxf - 1) * n;
-        for(int i = 24; i >= 0; i--) {
-            idel -= min(maxf - 1, count[i]);
+        int maxf = *max_element(count.begin(), count.end());
+        int maxCount = 0;
+        for(int i : count) {
+           if(i == maxf) {
+              maxCount++;
+           }
         }
-        return max(0, idel) + tasks.size();
+
+        int time = (maxf - 1) * (n + 1) + maxCount;
+        return max((int)tasks.size(), time);
     }
 };
